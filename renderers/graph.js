@@ -5,8 +5,6 @@ var headers = {
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
     'Access-Control-Request-Method': '*',
     'Access-Control-Allow-Methods': '*',
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
     'Content-Type': 'image/svg+xml'
 };
 
@@ -174,13 +172,16 @@ var point = type.append("g")
         .style("fill", "white")
         .style("stroke", function(d) { return color(this.parentNode.__data__.name); });
 
-  type.append("text")
+    type.append("text")
       .datum(labelInfo)
       .attr("transform", function(d) { return "translate(" + x(d.date) + "," + y(d.value) + ")"; })
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
   
+    headers["Cache-Control"] = "public, max-age=30";
+    headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
+    
   	res.writeHead( 200, headers );
 
 	var svgObject = d3.select( document.body ).select( "svg" ).attr( 'xmlns', 'http://www.w3.org/2000/svg' );

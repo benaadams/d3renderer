@@ -23,6 +23,15 @@ app.get( '/plaintext/*', function ( req, res ) {
 app.get( '/json/*', function ( req, res ) {
     require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'json.csv');
 } );
+app.get( '/singlequery/*', function ( req, res ) {
+    require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'singlequery.csv');
+} );
+app.get( '/multiquery/*', function ( req, res ) {
+    require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'multiquery.csv');
+} );
+app.get( '/fortunes/*', function ( req, res ) {
+    require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'fortunes.csv');
+} );
 
 var server = app.listen( port, function () {
 	var host = server.address().address;
