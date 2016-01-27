@@ -1,5 +1,4 @@
-var d3 = require( 'd3' ), 
-    document = require( 'jsdom' ).jsdom();
+var d3 = require( 'd3' );
 
 var headers = {
     'Access-Control-Allow-Origin': '*',
@@ -33,6 +32,9 @@ var style = "svg {  \
 
 module.exports = function (res, dataPath ) {
 
+
+var document = require( 'jsdom' ).jsdom();
+    
 var margin = {top: 10, right: 50, bottom: 30, left: 60},
         width = 888 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
