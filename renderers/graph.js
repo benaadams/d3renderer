@@ -37,7 +37,7 @@ module.exports = function (res, dataPath ) {
 
 var document = require( 'jsdom' ).jsdom();
     
-var margin = {top: 10, right: 100, bottom: 30, left: 60},
+var margin = {top: 10, right: 100, bottom: 30, left: 40},
         width = 888 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
@@ -57,6 +57,33 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)
+    .tickFormat(function(v){
+        if (v >= 10000000000000) {
+            return (v / 1000000000000).toFixed(0) + "Tn";
+        }
+        if (v >= 1000000000000) {
+            return (v / 1000000000000).toFixed(1) + "Tn";
+        }
+        if (v >= 10000000000) {
+            return (v / 1000000000).toFixed(0) + "Bn";
+        }
+        if (v >= 1000000000) {
+            return (v / 1000000000).toFixed(1) + "Bn";
+        }
+        if (v >= 10000000) {
+            return (v / 1000000).toFixed(0) + "M";
+        }
+        if (v >= 1000000) {
+            return (v / 1000000).toFixed(1) + "M";
+        }
+        if (v >= 10000) {
+            return (v / 1000).toFixed(0) + "K";
+        }
+        if (v >= 1000) {
+            return (v / 1000).toFixed(1) + "K";
+        }
+        return v;
+    })
     .orient("left");
 
 var line = d3.svg.line()
