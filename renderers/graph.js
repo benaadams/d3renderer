@@ -28,14 +28,17 @@ var style = "svg {  \
   stroke: steelblue;    \
   stroke-width: 1.5px;  \
 }   \
+.xtick { \
+  transform: rotate(-35deg);  \
+  text-anchor: end; \
+}   \
 ";
 
 module.exports = function (res, dataPath ) {
 
 
 var document = require( 'jsdom' ).jsdom();
-
-var margin = {top: 10, right: 50, bottom: 30, left: 60},
+var margin = {top: 10, right: 100, bottom: 50, left: 40},
         width = 888 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
@@ -51,6 +54,7 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .tickFormat(d3.time.format("%d %b %y"))
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -74,11 +78,8 @@ var yAxis = d3.svg.axis()
         if (v >= 1000000) {
             return (v / 1000000).toFixed(1) + "M";
         }
-        if (v >= 10000) {
-            return (v / 1000).toFixed(0) + "K";
-        }
         if (v >= 1000) {
-            return (v / 1000).toFixed(1) + "K";
+            return (v / 1000).toFixed(0) + "K";
         }
         return v;
     })
@@ -124,17 +125,25 @@ d3.csv(dataPath, function(error, data) {
     };
   });
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  var xDomain = d3.extent(data, function(d) { return d.date; });
+  xDomain[1] = new Date();
+      
+  x.domain(xDomain);
 
   y.domain([
-    d3.min(types, function(c) { return d3.min(c.values, function(v) { return v.value; }); }),
+    0,
     d3.max(types, function(c) { return d3.max(c.values, function(v) { return v.value; }); })
   ]);
 
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.5em")
+      .attr("dy", ".125em")
+      .attr("class", "xtick");
 
   svg.append("g")
       .attr("class", "y axis")
