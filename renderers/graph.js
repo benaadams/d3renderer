@@ -107,7 +107,7 @@ var svg = root.append("g")
 d3.csv(dataPath, function(error, data) {
   if (error) {
 	res.statusCode = 500;
-	res.end(error);
+	res.end(error.statusText);
     return;
   };
 
