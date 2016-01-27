@@ -2,7 +2,7 @@
 Server-side d3.js svg graph generator
 
 ##### Plaintext
-![plaintext](http://d3renderer.azurewebsites.net/plaintext)
+![plaintext](http://d3renderer.azurewebsites.net/plaintext?src=1)
 
 ##### JSON.Net
-![plaintext](http://d3renderer.azurewebsites.net/json)
+![json.net](http://d3renderer.azurewebsites.net/json?src=1)
