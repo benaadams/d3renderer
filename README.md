@@ -5,4 +5,4 @@ Server-side d3.js svg graph generator
 ![plaintext](https://d3renderer.azurewebsites.net/plaintext/v7?src=1)
 
 ##### JSON.Net
-![json.net](https://d3renderer.azurewebsites.net/json/v5?src=1)
+![json.net](https://d3renderer.azurewebsites.net/json/v6?src=1)
