@@ -17,10 +17,10 @@ app.get( '/', function ( req, res ) {
 	res.end();
 } );
 
-app.get( '/plaintext', function ( req, res ) {
+app.get( '/plaintext/*', function ( req, res ) {
     require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'plaintext.csv');
 } );
-app.get( '/json', function ( req, res ) {
+app.get( '/json/*', function ( req, res ) {
     require( './renderers/graph.js' )(res, ((req.query.src) ? srcUrlBase : aspnetUrlBase) + 'json.csv');
 } );
 
