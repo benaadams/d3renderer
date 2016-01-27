@@ -35,7 +35,7 @@ module.exports = function (res, dataPath ) {
 
 var document = require( 'jsdom' ).jsdom();
     
-var margin = {top: 10, right: 50, bottom: 30, left: 60},
+var margin = {top: 10, right: 100, bottom: 30, left: 60},
         width = 888 - margin.left - margin.right,
         height = 200 - margin.top - margin.bottom;
 
