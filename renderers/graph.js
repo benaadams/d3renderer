@@ -5,6 +5,8 @@ var headers = {
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
     'Access-Control-Request-Method': '*',
     'Access-Control-Allow-Methods': '*',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
     'Content-Type': 'image/svg+xml'
 };
 
