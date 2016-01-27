@@ -58,10 +58,7 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
-    .defined(function(d) { 
-        return d.value != 0; 
-        })
-    .interpolate("basis")
+    .defined(function(d) { return d.value != 0; })
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.value); });
 
@@ -131,6 +128,22 @@ d3.csv(dataPath, function(error, data) {
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
       .style("stroke", function(d) { return color(d.name); });
+
+var point = type.append("g")
+            .attr("class", "line-point");
+
+    point.selectAll('circle')
+        .data(function(d){ 
+                return d.values
+                    .filter(function(c) { return c.value != 0; })
+        })
+        .enter()
+      .append('circle')
+        .attr("cx", function(d) { return x(d.date) })
+        .attr("cy", function(d) { return y(d.value) })
+        .attr("r", 3)
+        .style("fill", "white")
+        .style("stroke", function(d) { return color(this.parentNode.__data__.name); });
 
   type.append("text")
       .datum(labelInfo)
