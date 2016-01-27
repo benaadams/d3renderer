@@ -58,7 +58,9 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
-    .defined(function(d) { return d.value != 0; })
+    .defined(function(d) { 
+        return d.value != 0; 
+        })
     .interpolate("basis")
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.value); });
@@ -93,7 +95,7 @@ d3.csv(dataPath, function(error, data) {
     return {
       name: name,
       values: data.map(function(d) {
-        return {date: d.date, value: +d[name]};
+        return {date: d.date, value: +d[name]||0};
       })
     };
   });
