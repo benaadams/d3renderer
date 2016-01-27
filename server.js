@@ -17,9 +17,10 @@ app.get( '/', function ( req, res ) {
 } );
 
 app.get( '/plaintext', function ( req, res ) {
-
     require( './renderers/graph.js' )(res, dataUrlBase + 'plaintext.csv');
-
+} );
+app.get( '/json', function ( req, res ) {
+    require( './renderers/graph.js' )(res, dataUrlBase + 'json.csv');
 } );
 
 var server = app.listen( port, function () {
