@@ -132,7 +132,7 @@ d3.csv(dataPath, function(error, data) {
   x.domain(xDomain);
 
   y.domain([
-    d3.min(types, function(c) { return d3.min(c.values, function(v) { return v.value; }); }),
+    d3.min(types, function(c) { return d3.min(c.values, function(v) { return v.value; }) / 1.25; }),
     d3.max(types, function(c) { return d3.max(c.values, function(v) { return v.value; }); })
   ]);
 
@@ -195,13 +195,7 @@ var point = type.append("g")
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
-/*      
-var legend = svg.append("g")
-  .attr("class","legend")
-  .attr("transform","translate(50,30)")
-  .style("font-size","12px")
-  .call(d3.legend)
-*/    
+
     headers["Cache-Control"] = "public, max-age=30";
     headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
     
