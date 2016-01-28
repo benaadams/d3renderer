@@ -10,12 +10,13 @@ var headers = {
 
 var style = "svg {  \
   font: 10px sans-serif;    \
+  fill:rgb(50%, 50%, 50%);  \
 }   \
     \
 .axis path, \
 .axis line {    \
   fill: none;   \
-  stroke: #000; \
+  stroke: rgb(50%, 50%, 50%); \
   shape-rendering: crispEdges;  \
 }   \
     \
@@ -131,7 +132,7 @@ d3.csv(dataPath, function(error, data) {
   x.domain(xDomain);
 
   y.domain([
-    0,
+    d3.min(types, function(c) { return d3.min(c.values, function(v) { return v.value; }); }),
     d3.max(types, function(c) { return d3.max(c.values, function(v) { return v.value; }); })
   ]);
 
@@ -163,7 +164,10 @@ d3.csv(dataPath, function(error, data) {
   type.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) { return color(d.name); });
+      .style("stroke", function(d) { return color(d.name); })
+    .append("title")
+      .text(function(d) { return d.name; });
+      
 
 var point = type.append("g")
             .attr("class", "line-point");
@@ -179,7 +183,11 @@ var point = type.append("g")
         .attr("cy", function(d) { return y(d.value) })
         .attr("r", 3)
         .style("fill", "white")
-        .style("stroke", function(d) { return color(this.parentNode.__data__.name); });
+        .style("stroke", function(d) { return color(this.parentNode.__data__.name); })
+    .append("title")
+      .text(function(d) { 
+          return this.parentNode.parentNode.__data__.name;
+          });
 
     type.append("text")
       .datum(labelInfo)
@@ -187,7 +195,13 @@ var point = type.append("g")
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
-  
+/*      
+var legend = svg.append("g")
+  .attr("class","legend")
+  .attr("transform","translate(50,30)")
+  .style("font-size","12px")
+  .call(d3.legend)
+*/    
     headers["Cache-Control"] = "public, max-age=30";
     headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
     
