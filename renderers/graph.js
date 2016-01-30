@@ -36,12 +36,67 @@ var style = "svg {  \
 ";
 
 module.exports = function (res, dataPath ) {
+    var cached = dataCache[dataPath];
+
+    if (!cached) {
+        dataCache[dataPath] = {isUpdating: true};
+    }
+
+    if (cached && cached.render) {
+        
+        headers["Cache-Control"] = "public, max-age=30";
+        headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
+        
+        res.writeHead( 200, headers );
+        res.end( cached.render );
+        
+        if ( cached.renderDate < Date.now() - 65000 ) {
+            updateCache(dataPath);
+        }
+        
+    } else {    
+        d3.csv(dataPath, 
+            function(error, data) { 
+                if (error) {
+                    return;
+                };
+                prepareData(data, dataPath);
+                
+                cached = dataCache[dataPath];
+                
+                headers["Cache-Control"] = "public, max-age=30";
+                headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
+                
+                res.writeHead( 200, headers );
+
+                res.end( cached.render );
+            }
+        );
+    }
+}
+
+function updateCache(dataPath) {
+    var entry = dataCache[dataPath];
+    if (!entry.isUpdating && (entry.renderDate || 0) < Date.now() - 10000) {
+        entry.isUpdating = true;
+        d3.csv(dataPath, 
+            function(error, data) { 
+                if (error) {
+                    return;
+                };
+                prepareData(data, dataPath);
+            }
+        );
+    }
+}
+
+function prepareData(data, dataPath) {
 
 
 var document = require( 'jsdom' ).jsdom();
-var margin = {top: 10, right: 100, bottom: 50, left: 40},
+var margin = {top: 10, right: 0, bottom: 50, left: 40},
         width = 888 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+        height = 300 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -104,17 +159,12 @@ root.append("defs")
 var svg = root.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv(dataPath, function(error, data) {
-  if (error) {
-	res.statusCode = 500;
-	res.end(error.statusText);
-    return;
-  };
-
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
   
   data.forEach(function(d) {
-    d.date = parseDate(d.date);
+      if (!(d.date instanceof Date)) {
+        d.date = parseDate(d.date);
+      }
   });
 
   var types = color.domain().map(function(name) {
@@ -196,15 +246,14 @@ var point = type.append("g")
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
 
-    headers["Cache-Control"] = "public, max-age=30";
-    headers["Expires"] = (new Date(Date.now() + 30000)).toUTCString(); 
-    
-  	res.writeHead( 200, headers );
 
 	var svgObject = d3.select( document.body ).select( "svg" ).attr( 'xmlns', 'http://www.w3.org/2000/svg' );
     
-	res.end( svgObject[0][0].outerHTML  );
-});
+    var cached = dataCache[dataPath];
+    cached.renderDate = Date.now();
+    cached.render = svgObject[0][0].outerHTML;
+    cached.isUpdating = false;
+}
 
 function labelInfo(d) {
     var maxDate = d3.max(d.values, 
@@ -225,5 +274,3 @@ function labelInfo(d) {
             };
     return v;
 }
-
-};
