@@ -1,4 +1,5 @@
 ﻿XMLHttpRequest = require('xhr2');
+global.dataCache = global.dataCache || {};
 
 var port = process.env.PORT || 1337;
 var srcUrlBase = "https://raw.githubusercontent.com/benaadams/d3renderer/master/data/";
