@@ -97,7 +97,7 @@ var document = require( 'jsdom' ).jsdom();
     
 var margin = {top: 10, right: 5, bottom: 50, left: 40},
         width = 888 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+        height = 300 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
