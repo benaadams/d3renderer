@@ -171,10 +171,27 @@ var svg = root.append("g")
     return {
       name: name,
       values: data.map(function(d) {
-        return {date: d.date, value: +d[name]||0};
+        return {date: d.date, value: +d[name]||-1};
       })
     };
   });
+  
+  types.forEach(
+      function(type) {
+        var index = 0;
+        while (type.values.length > index )
+        {
+            if (type.values[index].value >= 0)
+            {
+                index++;
+            }
+            else 
+            {
+	           type.values.splice(index, 1);
+            }    
+        }
+      }
+  );
 
   var xDomain = d3.extent(data, function(d) { return d.date; });
   xDomain[1] = new Date();
@@ -208,7 +225,8 @@ var svg = root.append("g")
 
   var type = svg.selectAll(".type")
       .data(types)
-    .enter().append("g")
+    .enter()
+      .append("g")
       .attr("class", "type");
 
   type.append("path")
